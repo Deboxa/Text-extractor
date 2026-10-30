@@ -5,12 +5,20 @@ from datetime import datetime
 # --- settings ---
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# make folder by day (YearMonthDay) and file by time (HHoursMMinutesSSeconds)
+# get root folder from arguments or use script folder
+ROOT = sys.argv[1] if len(sys.argv) > 1 else SCRIPT_DIR
+
+# extract the target folder name (e.g. "stand3d")
+target_name = os.path.basename(os.path.normpath(ROOT))
+if not target_name:
+    target_name = "root"
+
+# make folder by day (YearMonthDay) / target_name / time (HHMMSS)
 now = datetime.now()
 day_folder = now.strftime("%Y%m%d")
-file_name = now.strftime("H%HM%MS%S.txt")
+file_name = now.strftime("%H%M%S.txt")
 
-OUT_DIR = os.path.join(SCRIPT_DIR, "results", day_folder)
+OUT_DIR = os.path.join(SCRIPT_DIR, "results", day_folder, target_name)
 os.makedirs(OUT_DIR, exist_ok=True)
 
 OUTPUT = os.path.join(OUT_DIR, file_name)
@@ -71,8 +79,6 @@ def read_text(path):
     return None, "[err]"
 
 def main():
-    ROOT = sys.argv[1] if len(sys.argv) > 1 else SCRIPT_DIR
-    
     out_abs = os.path.abspath(OUTPUT)
     script_abs = os.path.abspath(__file__)
     
@@ -81,7 +87,6 @@ def main():
     total_lines = 0
 
     # --- print legend ---
-    print("=== LEGEND ===")
     print("[tmp]   - temporary file")
     print("[dir]   - inside ignored folder")
     print("[self]  - script or output file")
@@ -140,7 +145,6 @@ def main():
 
     # --- CONSOLE OUTPUT & ALIGNMENT ---
     
-    # calculate max width for alignment based on the longest list
     max_count = max(len(added_files), len(skipped_files))
     width = len(str(max_count)) if max_count > 0 else 1
     
