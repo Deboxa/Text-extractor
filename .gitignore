@@ -1,0 +1,31 @@
+# Игнорируем папку с результатами работы программы
+results/
+
+# Кэш Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Виртуальные окружения
+venv/
+.venv/
+env/
+ENV/
+
+# Настройки IDE и редакторов
+.vscode/
+.idea/
+*.swp
+*.swo
+*.bak
+
+# Системный мусор (Windows, macOS, Linux)
+Thumbs.db
+Desktop.ini
+.DS_Store
+*~
+
+# Логи и временные файлы
+*.log
+*.tmp
+*.temp
